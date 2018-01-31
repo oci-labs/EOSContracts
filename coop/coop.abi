@@ -1,0 +1,115 @@
+{
+  "types": [{
+      "new_type_name": "account_name",
+      "type": "name"
+    }
+  ],
+  "structs": [{
+      "name": "transfer",
+      "base": "",
+      "fields": [
+        {"name":"from", "type":"account_name"},
+        {"name":"to", "type":"account_name"},
+        {"name":"quantity", "type":"asset"},
+        {"name":"memo", "type":"string"}
+      ]
+    },{
+     "name": "issue",
+     "base": "",
+     "fields": [
+        {"name":"to", "type":"account_name"},
+        {"name":"quantity", "type":"asset"}
+     ]
+  },{
+      "name": "account",
+      "base": "",
+      "fields": [
+        {"name":"coop", "type":"uint64"},
+        {"name":"balance", "type":"uint64"}
+      ]
+    },{
+      "name": "currency_stats",
+      "base": "",
+      "fields": [
+        {"name":"coop", "type":"uint64"},
+        {"name":"supply", "type":"uint64"}
+      ]
+    },{
+      "name": "addqty",
+      "base": "",
+      "fields": [
+        {"name":"farmer", "type":"account_name"},
+        {"name":"quantity", "type":"uint64"}
+      ]
+    },{
+      "name": "purchase",
+      "base": "",
+      "fields": [
+        {"name":"trader", "type":"account_name"},
+        {"name":"quantity", "type":"uint64"},
+        {"name":"max_price", "type":"asset"}
+      ]
+    },{
+      "name": "fill",
+      "base": "",
+      "fields": [
+        {"name":"trader", "type":"account_name"},
+        {"name":"farmer", "type":"account_name"},
+        {"name":"quantity", "type":"uint64"}
+      ]
+    },{
+      "name": "farmer_data",
+      "base": "",
+      "fields": [
+        {"name":"farmer", "type":"account_name"},
+        {"name":"quantity", "type":"uint64"}
+      ]
+    },{
+      "name": "purchase_data",
+      "base": "",
+      "fields": [
+        {"name":"trader", "type":"account_name"},
+        {"name":"farmer", "type":"account_name"},
+        {"name":"quantity", "type":"uint64"},
+        {"name":"filled", "type":"uint64"}
+      ]
+    }
+  ],
+  "actions": [{
+      "name": "transfer",
+      "type": "transfer"
+    },{
+      "name": "issue",
+      "type": "issue"
+    },{
+      "name": "addqty",
+      "type": "addqty"
+    },{
+      "name": "purchase",
+      "type": "purchase"
+    },{
+      "name": "fill",
+      "type": "fill"
+    }
+  ],
+  "tables": [{
+      "name": "account",
+      "type": "account",
+      "index_type": "i64",
+      "key_names" : ["coop"],
+      "key_types" : ["uint64"]
+    },{
+      "name": "stat",
+      "type": "currency_stats",
+      "index_type": "i64",
+      "key_names" : ["coop"],
+      "key_types" : ["uint64"]
+    },{
+      "name": "farmers",
+      "type": "farmer_data",
+      "index_type": "i64",
+      "key_names" : ["farmer","quantity"],
+      "key_types" : ["account_name","uint64"]
+    }
+  ]
+}
