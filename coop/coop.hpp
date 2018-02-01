@@ -9,7 +9,7 @@
 #include <eosiolib/generic_currency.hpp>
 
 namespace coop {
-   typedef eosio::generic_currency< eosio::token<N(coop),S(4,GOLD)> > contract;
+   typedef eosio::generic_currency< eosio::token<N(coop),S(4,GOLD)> > gold;
 
    ACTION( N(coop), addqty ) {
       typedef action_meta<N(coop),N(addqty)> meta;

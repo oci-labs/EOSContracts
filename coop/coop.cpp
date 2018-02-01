@@ -6,6 +6,10 @@
 #include <coop/coop.hpp> /// defines transfer struct (abi)
 namespace coop {
    struct impl {
+      static eosio::asset price() {
+         return eosio::asset(10, S(4, GOLD));
+      }
+
       static void on( const addqty& act ) {
          require_auth( addqty::get_account() );
          require_auth( act.farmer );
@@ -18,6 +22,9 @@ namespace coop {
       static void on( const purchase& act ) {
          require_auth( purchase::get_account() );
          require_auth( act.trader );
+         assert (act.max_price.symbol == price().symbol, "max_price has incorrect symbol");
+         assert (act.max_price.amount >= price().amount, "max_price below selling price");
+
          farmer_data farmer;
          eosio::print("trader=", act.trader, ", quantity=", act.quantity, "\n");
          assert(front_i64(N(coop),N(coop),N(farmers), &farmer, sizeof(farmer_data)), "no farmers in coop");
@@ -53,7 +60,10 @@ namespace coop {
 extern "C" {
     /// The apply method implements the dispatch of events to this contract
     void apply( uint64_t code, uint64_t action ) {
-       if (!eosio::dispatch<coop::impl, coop::addqty, coop::purchase, coop::fill>(code, action))
-          coop::contract::apply( code, action );
+       if (!eosio::dispatch<coop::impl, coop::addqty, coop::purchase, coop::fill>(code, action)) {
+          if ( !eosio::dispatch<coop::gold, coop::gold::transfer_memo, coop::gold::issue>( code, action ) ) {
+             assert( false, "received unexpected action" );
+          }
+       }
     }
 }
